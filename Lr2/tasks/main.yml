@@ -1,30 +1,56 @@
-- name: Create a text file with content
-  shell: echo test_file_content > $HOME/test.txt
+# tasks file for caddy_deploy
 
-- name: Read file content
-  shell: cat $HOME/test.txt
-  register: output_file_content
-  tags: read_file
+- name: Install prerequisites
+  apt:
+    pkg:
+    - debian-keyring
+    - debian-archive-keyring
+    - apt-transport-https
+    - curl
 
-- name: Show file content
-  debug:
-    msg: "{{ output_file_content.stdout }}"
-  tags: read_file
+- name: Add key for Caddy repo
+  apt_key:
+    url: https://dl.cloudsmith.io/public/caddy/stable/gpg.key
+    state: present
+    keyring: /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 
-- name: Change the content of the file
-  shell: echo new_file_content > $HOME/test.txt
+- name: add Caddy repo
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/caddy-stable-archive-keyring.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
+    state: present
+    filename: caddy-stable
 
-- name: Read file content
-  shell: cat $HOME/test.txt
-  register: output_file_content
-  tags: read_file
+- name: add Caddy src repo
+  apt_repository:
+    repo: "deb-src [signed-by=/usr/share/keyrings/caddy-stable-archive-keyring.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
+    state: present
+    filename: caddy-stable
 
-- name: Show file content
-  debug:
-    msg: "{{ output_file_content.stdout }}"
-  tags: read_file
+- name: Install Caddy webserver
+  apt:
+    name: caddy
+    update_cache: yes
+    state: present
 
-- name: Remove the text file
-  file:
-    path: $HOME/test.txt
-    state: absent
+- name: Create config file
+  template:
+    src: templates/Caddyfile.j2  # Откуда берем
+    dest: /etc/caddy/Caddyfile  # Куда кладем
+
+- name: Create custom index.html
+  copy:
+    content: |
+      <html>
+      <head>
+        <title>Laboratornaya</title>
+      </head>
+      <body>
+        <h1>Dont buy premium Tigers</h1>
+      </body>
+      </html>
+    dest: /usr/share/caddy/index.html
+
+- name: Reload with new config
+  service:
+    name: caddy
+    state: reloaded
