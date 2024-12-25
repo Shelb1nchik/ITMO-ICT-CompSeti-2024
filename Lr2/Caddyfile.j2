@@ -1,0 +1,19 @@
+{
+auto_https off
+}
+
+:80 {
+    root * /usr/share/caddy
+    file_server
+
+    log {
+        output file /var/log/caddy/access.log
+        format json
+        level info
+    }
+
+    header / {
+        X-Custom-Header "Laboratornaya"
+    }
+
+}
