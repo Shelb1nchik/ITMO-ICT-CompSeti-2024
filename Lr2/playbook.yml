@@ -1,0 +1,6 @@
+---
+- hosts: my_servers  # хосты из файла inventory/hosts, где будем выполнять наш плейбук
+  connection: local  # аналог -c local, но для плейбуков
+
+  roles:
+    - task1  # собственно, роль для выполнени
