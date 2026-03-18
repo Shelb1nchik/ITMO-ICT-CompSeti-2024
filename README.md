@@ -4,45 +4,45 @@
 
 ![13](Lr1/images/13.jpg)
 
-![8](images/8.jpg)
+![8](Lr1/images/8.jpg)
 
-![9](images/9.jpg)
+![9](Lr1/images/9.jpg)
 
 ## Часть 2. Мониторинг
 1. Подключились к Zabbix через креды
 2. Импортировали кастомный шаблон для мониторинга nextcloud.
 3. Чтобы Zabbix и Nextcloud могли общаться по своим коротким именам внутри докеровской сети, в некстклауде “разрешили” это имя. Для этого нужно зашли на контейнер некстклауда под юзером www-data и выполнили команду php occ config:system:set trusted_domains 1 --value="nextcloud":
 
-![1](images/1.jpg)
+![1](Lr1/images/1.jpg)
 
 4. Добавили Hosts в Zabbix для Nextcloud:
    
-![2](images/2.jpg)
+![2](Lr1/images/2.jpg)
 
-![3](images/3.jpg)
+![3](Lr1/images/3.jpg)
 
 ## Часть 3. Визуализация
 1. Выполнили команды для Grafana
 2. Зашли в графану (по умолчанию http://localhost:3000/), раздел Administration → Plugins. Нашли там Zabbix, активировали его (Enable):
 
-![4](images/4.jpg)
+![4](Lr1/images/4.jpg)
 
 3. Подключаем Loki к Grafana, раздел Connections → Data sources → Loki. В настройках подключения указали любое имя и адрес http://loki:3100:
 
-![5](images/5.jpg)
+![5](Lr1/images/5.jpg)
 
-![6](images/6.jpg)
+![6](Lr1/images/6.jpg)
 
 
 4. Проверили работоспособность Zabbix:
 
-![7](images/7.jpg)
+![7](Lr1/images/7.jpg)
 
-![10](images/10.jpg)
+![10](Lr1/images/10.jpg)
 
-![11](images/11.jpg)
+![11](Lr1/images/11.jpg)
 
-![12](images/12.jpg)
+![12](Lr1/images/12.jpg)
 
 ## Ответы на вопросы:
 1. Чем SLO отличается от SLA? SLO — это внутренняя цель качества услуги, а SLA — внешнее обязательство с клиентом, подкреплённое договором.
